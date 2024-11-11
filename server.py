@@ -10,6 +10,11 @@ logging.basicConfig(level=logging.DEBUG, format='%(asctime)s - %(levelname)s - %
 class Greeter(service_pb2_grpc.GreeterServicer):
     def SayHello(self, request, context):
         logging.info(f"Received a request with name: {request.name}")
+
+        metadata = {k: v for k, v in context.invocation_metadata()}
+
+        for key, value in metadata.items():
+            logging.info(f"  {key}: {value}")
         return service_pb2.HelloReply(message='Hello, %s!' % request.name)
 
 class HealthServicer(service_pb2_grpc.HealthServicer):
